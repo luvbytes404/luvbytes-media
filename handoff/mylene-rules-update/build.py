@@ -94,6 +94,46 @@ def build(base):
         n.decompose()
     boss_html = str(boss)
 
+    # ------------------------------------------------------------ card hook: lettering baked under the card (Viki 2026-11-22, the Lupa way)
+    card_p.clear()
+    card_p.append(frag('<img src="img/mylene-card-hook.webp" alt="Mylene · Door\'s locked, sweetheart. Come sit closer~ · LuvBytes" style="width:100%;max-width:360px;border-radius:5%">'))
+
+    # ------------------------------------------------------------ opener cards: chevron + dropdown with more info
+    OPEN = [
+        ('Heroic Entrance', '11:42 PM | Friday, autumn | The Underground | 19°C', 'A pushy stranger crowds my favourite regular. I cut in, then check who needs a drink.', '',
+         ['Thank me for the rescue', 'Rate my heroic entrance', 'Take the drink and stay']),
+        ('Rooftop After the Set', '12:16 AM | Saturday, autumn | the bar rooftop | 9°C', 'After my set I bring somebody special up to the quiet roof and wrap my jacket around them.', '',
+         ['Give me honest feedback on the set', 'Ask why I kept finding one face', 'Keep my jacket, lean closer']),
+        ('Bonfire on the Coast', '8:03 PM | Saturday, summer | Oregon coast | 17°C', 'Band bonfire on the beach. I pat the blanket beside me and hold out a cinnamon drink.', 'Kira, Amaya, Millie',
+         ['Sit with me and take the mug', 'Tell me something true', 'Join Kira, Amaya or Millie']),
+        ('Snowed In', '10:37 PM | Friday, winter | the shared house | 22°C', 'Movie night with snow at the windows. I lift my blanket and call somebody over to get warm.', 'Kira, Amaya, Millie',
+         ['Crawl under my blanket', 'Make me come and carry you', 'Stay put and see what I do']),
+        ('Dessert Upstairs', '1:18 AM | Saturday, spring | my kitchen above the bar | 20°C', "After closing I'm on my kitchen counter in an open robe, and dessert is me.", '',
+         ['Watch me finish', 'Lick up the sauce', 'Ask me for an instruction']),
+        ('Tour Bus Morning', '9:26 AM | Tuesday, summer | the tour bus | 21°C', "A slow morning on the parked bus. My girls are already busy with each other, and I'm watching over coffee.", 'Kira, Amaya, Millie',
+         ['Help Millie', 'Help Amaya with Kira', 'Enjoy the show with me']),
+        ('Cannon Beach', '3:17 PM | Sunday, summer | Cannon Beach, Oregon | 18°C', 'The girls tease Millie about hiding her curves. I lean over and offer a choice.', 'Kira, Amaya, Millie',
+         ['Pick boobs', 'Pick ass', 'Join in teasing Millie']),
+        ('Burn It Away', '12:48 AM | Saturday, autumn | my bedroom above the bar | 20°C', 'A nightmare shift. I bring it upstairs, wound up and nowhere near done.', '',
+         ['Start over with me', 'Tell me how to finish', 'Take a deep breath, hold on']),
+    ]
+    og = find_text(openers, 'Heroic Entrance', 'div').parent.parent.parent
+    assert '5.93em' in og['style']; og['style'] = og['style'].replace('5.93em', '7.2em')   # four across on PC, two on phones
+    for i, (title, header, setup, cast, acts) in enumerate(OPEN):
+        c = AMBER if i < 4 else ROSE
+        tdiv = find_text(openers, title, 'div')
+        pad = tdiv.parent
+        li = ''.join(f'<div style="display:flex;gap:.4em;margin-top:.3em;"><span style="flex:0 0 auto;color:{c};font-weight:700;">›</span><span style="min-width:0;">{a}</span></div>' for a in acts)
+        castl = f'<div style="margin-top:.5em;font:700 .78em/1.4 Jura,sans-serif;letter-spacing:.1em;color:#cfc8d2;">WITH <span style="font:600 1.1em/1.4 Lexend,system-ui,sans-serif;letter-spacing:0;">{cast}</span></div>' if cast else ''
+        pad.append(frag(
+            '<details style="margin-top:.57em;padding-top:.5em;border-top:1px solid #ffffff1c;">'
+            '<summary style="list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5em;">'
+            f'<span style="font:700 .6em/1.3 Jura,sans-serif;letter-spacing:.18em;color:{c};">MORE</span><span style="font-size:.72em;line-height:0;">{chev(c)}</span></summary>'
+            '<div style="animation:sonner-fade-in .4s ease-out both;margin-top:.57em;text-align:left;font:300 .8em/1.45 Lexend,system-ui,sans-serif;color:#e9dfe4;">'
+            f'<div style="font:700 .74em/1.5 Jura,sans-serif;letter-spacing:.08em;color:{c};">{header}</div>'
+            f'<div style="margin-top:.4em;">{setup}</div>{castl}<div style="margin-top:.5em;">{li}</div>'
+            '<div style="margin-top:.5em;font:italic 400 1.1em/1.4 \'Crimson Text\',Georgia,serif;color:#f4ebe2;">Or do whatever you want.</div></div></details>'))
+
     # ------------------------------------------------------------ hero pitch (first person)
     set_text(hero.find('p'), "The Underground is my moms' bar, down a flight of stairs in Portland. I pour until the last song, then I get up on stage and sing it. "
              "A certain regular keeps taking the same stool. I noticed early, sweetheart, and I have been keeping an eye on that seat ever since.")
@@ -196,6 +236,19 @@ def build(base):
     # ------------------------------------------------------------ author's note holds the creators
     grid = creators.find('div', style=re.compile('grid-template-columns:repeat\\(3'))
     grid.extract()
+    CREATORS = [('Élidan', 'a43eea09-2cc3-4d6c-8470-6d8b91b61cf3_profile-of-elidan-drakion', 'elidan'), ('Zach108', '1c335f29-911d-463b-9096-7309393209ab_profile-of-zach-108', 'zach108'),
+                ('Symen', 'bf9133ed-be33-4286-b166-300ac9051c0f_profile-of-symen', 'symen'), ('Kandihara', 'd81c2c8d-384e-4392-a6cb-3b6627a9aa4e_profile-of-kandihara', 'kandihara'),
+                ('Eiben', '98068345-2edf-451c-96b4-e22c218593ff_profile-of-eiben', 'eiben'), ('TuxyBoi', '4333bbf5-a12a-4501-9e94-db5cf91e70c8_profile-of-tuxyboi', 'tuxyboi'),
+                ('Soheisu', '844cf7ec-fa80-46cf-a797-c1664af118aa_profile-of-soheisu', 'soheisu'), ('Seraphimus', '4e2b4813-97ef-49d4-afb7-0dbe2b2d87a5_profile-of-seraphimus', 'seraphimus'),
+                ('Damascus616', 'e6491c73-b849-4288-a97f-9983803b455c_profile-of-damascus616', 'damascus616')]
+    tpl = str(grid.find('a'))
+    grid.clear()
+    for nm, prof, slug in CREATORS:           # the same nine as Lupa's Bio, with their real avatars
+        a = frag(tpl).a
+        a['href'] = 'https://janitorai.com/profiles/' + prof
+        im = a.find('img'); im['src'] = f'img/cr-{slug}.webp'; im['alt'] = nm + ' · LuvBytes'
+        set_text(a.find_all('div')[-1], nm)
+        grid.append(a)
     grid['style'] = 'display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.71em;margin-top:.57em;font-size:.68em;max-width:26em;margin-left:auto;margin-right:auto;'
     nbody = kids(note.find('details'))[1]
     nbody.append(frag('<div style="margin-top:1em;padding-top:.86em;border-top:1px solid #ffffff1c;"><div style="text-align:center;font:700 .66em/1.3 Jura,sans-serif;letter-spacing:.2em;color:#ffb35c;">CREATORS TO FOLLOW</div></div>'))
@@ -252,6 +305,7 @@ if __name__ == '__main__':
         'Jump buttons: Skip to the openings, Music & Gallery, Jump to the end, plus the "Click any image to enlarge it" line.',
         'Songs: two show, the rest scroll. Creators sit inside the author\'s note. Height is 5′9″ · 175 cm. Her chibi moved to the sandbox card.',
         'Red Bloom (your note of 22 Nov): the portrait card with the HP bar and the five lines stays, then it goes straight to the ending picture and SIGNAL RESTORED. The scar, the three tests and the four moves are removed.',
+        'Round 2 (22 Nov evening): new hook line baked as lettering under the card picture; every opener card has a MORE arrow with the header, setup, who is there and things to do; all nine creators with their avatars.',
         'Mylene Hart has her ChatGPT name plate, and The Underground has its own bar picture.',
     ]
     html = page('Mylene / rules update', body, key='mylene-rules', accent=AMBER, changes=changes, caption='Mylene · rules update 2026-11-22 · local draft, nothing on Janitor')
