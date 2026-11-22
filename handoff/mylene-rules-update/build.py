@@ -44,17 +44,18 @@ STRIP = ('<div style="line-height:0;container-type:inline-size;margin:0 auto;max
          'style="display:block;width:100cqw;height:auto;filter:drop-shadow(0 .21em 0 #000);"></div>')
 
 
-def fold_summary(title, sub, c, rot):
+def fold_summary(title, sub, c, rot, plate=None):
     return ('<summary style="list-style:none;cursor:pointer;display:flex;align-items:center;gap:.57em;padding:.14em .14em .14em .29em;">'
             '<span style="flex:1 1 auto;min-width:0;text-align:center;">'
-            f'<span style="display:block;font-family:\'Berkshire Swash\',Georgia,serif;font-size:1.75em;line-height:1.1;color:{CREAM};transform:rotate({rot}deg);text-shadow:{OUTLINE},.1em .1em 0 {c};">{title}</span>'
+            + (f'<img src="{plate}" alt="{title} · LuvBytes" style="display:block;width:min(100%,15em);height:auto;margin:0 auto;filter:drop-shadow(0 .2em .3em #000a);">' if plate else
+               f'<span style="display:block;font-family:\'Berkshire Swash\',Georgia,serif;font-size:1.75em;line-height:1.1;color:{CREAM};transform:rotate({rot}deg);text-shadow:{OUTLINE},.1em .1em 0 {c};">{title}</span>') +
             f'<span style="display:block;font:700 .6em/1.3 Jura,sans-serif;letter-spacing:.18em;color:{c};margin-top:.5em;">{sub}</span></span>'
             + chev(c) + '</summary>')
 
 
-def fold_board(colour, title, sub, c, rot, body_nodes):
+def fold_board(colour, title, sub, c, rot, body_nodes, plate=None):
     """plaid board, rose strips top and bottom, the middle is one fold"""
-    b = frag(f'<div style="{plaid(colour)}">{STRIP}<div style="padding:.86em 0 .71em;"><details>{fold_summary(title, sub, c, rot)}'
+    b = frag(f'<div style="{plaid(colour)}">{STRIP}<div style="padding:.86em 0 .71em;"><details>{fold_summary(title, sub, c, rot, plate)}'
              '<div data-foldbody="1" style="animation:sonner-fade-in .4s ease-out both;margin-top:1em;"></div></details></div>' + STRIP + '</div>').div
     body = b.find(attrs={'data-foldbody': '1'})
     del body['data-foldbody']
@@ -131,7 +132,7 @@ def build(base):
     right.append(wants)
     cards.extract(); cards['style'] = cards['style'].replace('14.29em', '9.5em') + 'margin-top:1.14em;'
     a_more.decompose(); a_title.decompose()
-    f1 = fold_board('#3b1d33', 'Mylene Hart', 'TAP TO MEET HER', AMBER, -2, [a_grid1.extract(), a_grid2.extract(), cards])
+    f1 = fold_board('#3b1d33', 'Mylene Hart', 'TAP TO MEET HER', AMBER, -2, [a_grid1.extract(), a_grid2.extract(), cards], plate='img/mylene-hart-plate.webp')
     about.replace_with(f1)
 
     # ------------------------------------------------------------ fold 2: The Underground (world + her girls)
@@ -146,7 +147,7 @@ def build(base):
         fr['style'] = fr['style'].replace('flex:0 0 38%;max-width:10.71em', 'flex:0 0 34%;max-width:8.2em')
     gg = g_card.find('div'); gg['style'] = gg['style'].replace('15.71em', '13.5em')
     place = frag('<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15em),1fr));gap:0;border-radius:1em;background:#0d0b0e;box-shadow:0 0 0 2px #000,inset 0 0 0 1px #ffb35c55;overflow:hidden;align-items:center;">'
-                 '<div style="min-width:0;line-height:0;container-type:inline-size;background:#0d0b0e;"><img src="img/bar.webp" alt="The Underground bar · LuvBytes" style="display:block;width:100cqw;height:auto;""></div>'
+                 '<div style="min-width:0;line-height:0;container-type:inline-size;background:#0d0b0e;"><img src="img/bar.webp" alt="The Underground bar · LuvBytes" style="display:block;width:100cqw;height:auto;"></div>'
                  '<div style="min-width:0;padding:.86em 1em 1em;"><div style="font:700 .66em/1.3 Jura,sans-serif;letter-spacing:.16em;color:#ffb35c;">THE BAR · PORTLAND</div>'
                  '<div style="font:300 .9em/1.55 Lexend,system-ui,sans-serif;color:#e9dfe4;margin-top:.29em;">My moms\' bar, down a flight of stairs. Jazz on old speakers until the band plugs in, then Black Sugar takes the stage. '
                  'My kitchen stays warm long after last call. Regulars get a stool, sweetheart. Favourites get a plate.</div></div></div>').div
@@ -243,7 +244,7 @@ if __name__ == '__main__':
         'Jump buttons: Skip to the openings, Music & Gallery, Jump to the end, plus the "Click any image to enlarge it" line.',
         'Songs: two show, the rest scroll. Creators sit inside the author\'s note. Height is 5′9″ · 175 cm. Her chibi moved to the sandbox card.',
         'Red Bloom boss fight: not touched.',
-        'Still open: the bar picture is a low-res draft take, and the Mylene Hart name plate is still text until a ChatGPT plate is made on the PC.',
+        'Mylene Hart has her ChatGPT name plate, and The Underground has its own bar picture.',
     ]
     html = page('Mylene / rules update', body, key='mylene-rules', accent=AMBER, changes=changes, caption='Mylene · rules update 2026-11-22 · local draft, nothing on Janitor')
     html = html.replace('<link rel="stylesheet"', '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Dancing+Script:wght@700&family=Jura:wght@700&family=Press+Start+2P&family=Lexend:wght@300;400;600;700;800&display=swap">\n<link rel="stylesheet"', 1)
