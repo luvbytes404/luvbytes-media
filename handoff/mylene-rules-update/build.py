@@ -118,7 +118,7 @@ def build(base):
          ['Start over with me', 'Tell me how to finish', 'Take a deep breath, hold on']),
     ]
     og = find_text(openers, 'Heroic Entrance', 'div').parent.parent.parent
-    assert '5.93em' in og['style']; og['style'] = og['style'].replace('5.93em', '7.2em')   # four across on PC, two on phones
+    assert '5.93em' in og['style']; og['style'] = og['style'].replace('5.93em', '7.2em') + 'align-items:start;'   # four across on PC, two on phones
     for i, (title, header, setup, cast, acts) in enumerate(OPEN):
         c = AMBER if i < 4 else ROSE
         tdiv = find_text(openers, title, 'div')
