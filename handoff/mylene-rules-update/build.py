@@ -96,7 +96,7 @@ def build(base):
 
     # ------------------------------------------------------------ card hook: lettering baked under the card (Viki 2026-11-22, the Lupa way)
     card_p.clear()
-    card_p.append(frag('<img src="img/mylene-card-hook.webp" alt="Mylene · Door\'s locked, sweetheart. Come sit closer~ · LuvBytes" style="width:100%;max-width:360px;border-radius:5%">'))
+    card_p.append(frag('<img src="img/mylene-card-hook.webp" alt="Mylene · Come here. Let me handle you tonight~ · LuvBytes" style="width:100%;max-width:360px;border-radius:5%">'))
 
     # ------------------------------------------------------------ opener cards: chevron + dropdown with more info
     OPEN = [
