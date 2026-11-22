@@ -84,6 +84,14 @@ def build(base):
     inner = outer.find('div')
     top, a_media, songs, a_open, openers, boss, sandbox, note, creators, banners, follow, a_end, foot = kids(inner)
     hero, jumpbox, about, girls = kids(top)
+    # Viki 2026-11-22 19:02: Red Bloom keeps the portrait card with the HP bar and the five lines, then goes straight to the ending
+    # picture ("Come on. Show me something unforgettable." / SIGNAL RESTORED). The scar, the three tests and the four moves are out.
+    bmain = kids(boss)[2]
+    bk = kids(bmain)
+    kids(kids(bk[4])[1])[1].decompose()          # "Three little tests, sweetheart..." line
+    for n in bk[5:8]:
+        assert any(w in n.get_text() for w in ('THE SCAR', 'THREE LITTLE TESTS', 'YOUR MOVE')), n.get_text()[:40]
+        n.decompose()
     boss_html = str(boss)
 
     # ------------------------------------------------------------ hero pitch (first person)
@@ -243,7 +251,7 @@ if __name__ == '__main__':
         'Every name has its own colour with a small key in the jump box. Kira moved to a redder orange so she is not confused with Mylene.',
         'Jump buttons: Skip to the openings, Music & Gallery, Jump to the end, plus the "Click any image to enlarge it" line.',
         'Songs: two show, the rest scroll. Creators sit inside the author\'s note. Height is 5′9″ · 175 cm. Her chibi moved to the sandbox card.',
-        'Red Bloom boss fight: not touched.',
+        'Red Bloom (your note of 22 Nov): the portrait card with the HP bar and the five lines stays, then it goes straight to the ending picture and SIGNAL RESTORED. The scar, the three tests and the four moves are removed.',
         'Mylene Hart has her ChatGPT name plate, and The Underground has its own bar picture.',
     ]
     html = page('Mylene / rules update', body, key='mylene-rules', accent=AMBER, changes=changes, caption='Mylene · rules update 2026-11-22 · local draft, nothing on Janitor')
